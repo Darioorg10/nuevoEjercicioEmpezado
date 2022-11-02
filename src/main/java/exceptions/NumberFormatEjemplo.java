@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 public class NumberFormatEjemplo {
 
     public static void main(String[] args) {
+        mostrarMensaje("Hola, buenas tardes");
         int edad1 = leerNumeroEntero();
         System.out.println("Edad 1: " + edad1);
         int edad2 = leerNumeroEnteroSinErrores();
@@ -25,6 +26,10 @@ public class NumberFormatEjemplo {
         int edad = Integer.parseInt(tmp);
         return edad;
     }
+    
+    private static void mostrarMensaje(String mensaje){
+        JOptionPane.showMessageDialog(null, mensaje);
+    }
 
     private static int leerNumeroEnteroSinErrores() {
 
@@ -35,11 +40,11 @@ public class NumberFormatEjemplo {
             String tmp = JOptionPane.showInputDialog("Introduce tu edad: ");
             try {
                 edad = Integer.parseInt(tmp);
-                repetir = false;
+                break;
             } catch (NumberFormatException nfe) {
                 JOptionPane.showConfirmDialog(null, "No has introducido un número entero.");
             }
-        } while (repetir);
+        } while (true);
         
         return edad;
     }
