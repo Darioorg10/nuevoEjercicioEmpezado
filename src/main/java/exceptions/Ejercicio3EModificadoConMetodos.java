@@ -11,111 +11,58 @@ import javax.swing.JOptionPane;
  * @author dario
  */
 public class Ejercicio3EModificadoConMetodos {
-    
+
     public static void main(String[] args) {
 
-        // Creamos el primer bucle, donde si la opcion es diferente a calcular o terminar
-        // se vuelve a pedir
-        String opcion;
-        String opcionTexto;
         String codigoProducto;
 
-        // Costes mano obra
-        double manoObra;
+        // Mostramos el menú inicial
+        String opcion = "";
+        do {
 
-        // Margen de beneficio por unidad
-        final double BENEFICIO_M1_M2_P1 = 0.5; // 50%
-        final double BENEFICIO_T1_2 = 0.65;    // 65%
-
-        // Beneficio final
-        final double BENEFICIO_VENTAS = 2500;
-
-        // Rango precio materia prima
-        final double LIMITE_INFERIOR_MATERIA = 0.1;
-        final double LIMITE_SUPERIOR_MATERIA = 1;
-
-        // Rango coste mano de obra
-        final double LIMITE_INFERIOR_OBRA = 0.5;
-        final double LIMITE_SUPERIOR_OBRA = 0.9;
-
-        // Variables
-        double precioMateriaPrima = 0;
-        double costeProduccion = 0;
-        double precioVentaU = 0;
-        int unidadesParaBeneficio = 0;
-
-        do { // Bucle del menú inicial
-
-            // Mostramos el menú inicial
-            
             opcion = UtilidadesEjercicio3E.pedirOpcion(); // Apartado 1
-            
-            // Leemos 
-            
-            if (opcion.equals("CALCULAR")) {
-                // Creamos lo que pasa si introduces calcular
 
-                do { //Bucle  al introducir el calcular
-                    opcion
-                            = JOptionPane.showInputDialog("Introduce el código del producto o salir");
-                    opcion = opcion.toUpperCase();
+            // Si no es salir, pido el código de producto
+            if (!opcion.equalsIgnoreCase("salir")) {
 
-                    // Si el código es válido o quiere salir              
-                    switch (opcion) {
-                        case "M1","M2","T1","T2", "P1":
+                // Pedir y filtrar el código del producto                
+                codigoProducto = UtilidadesEjercicio3E.pedirCodigoProducto();
 
-                            // Pedimos la materia prima y repite si no es válido
-                            do {
-                                precioMateriaPrima = Double.parseDouble(
-                                        JOptionPane.showInputDialog("Introduce precio materia prima"
-                                                + " entre 0.1 y 1"));
-                            } while (!(precioMateriaPrima >= LIMITE_INFERIOR_MATERIA
-                                    && precioMateriaPrima <= LIMITE_SUPERIOR_MATERIA));
+                // Si código producto no es salir, realizo los cálculos                
+                if (!codigoProducto.equalsIgnoreCase("salir")) {
 
-                            // Pedimos la mano de obra y repite si no es válido
-                            do {
-                                manoObra = Double.parseDouble(
-                                        JOptionPane.showInputDialog("Introduce el coste de"
-                                                + " la mano de obra (entre 0.5 y 0.9)"));
-                            } while (!(manoObra >= LIMITE_INFERIOR_OBRA
-                                    && manoObra <= LIMITE_SUPERIOR_OBRA));
+                    // Solicitar y filtrar materia prima
+                    double materiaPrima = UtilidadesEjercicio3E.pedirMateriaPrima();
 
-                            // Hacemos los cálculos
-                            // Calculamos el coste de producción
-                            costeProduccion = precioMateriaPrima + manoObra;
+                    // Solicitar y filtrar mano de obra
+                    double manoObra = UtilidadesEjercicio3E.pedirManoObra();
 
-                            // Seleccionamos el beneficio que sea
-                            double beneficio = ((opcion.equals("T2")
-                                    || opcion.equals("T1"))) ? BENEFICIO_T1_2 : BENEFICIO_M1_M2_P1;
+                    // Calcular coste de producción
+                    double costeProduccion = (materiaPrima + manoObra);
 
-                            // Calculamos el precio de venta unitario
-                            precioVentaU = costeProduccion + (beneficio * costeProduccion);
+                    // Calcular beneficio
+                    double beneficio = UtilidadesEjercicio3E.calcularBeneficio(codigoProducto, costeProduccion);
 
-                            // Calculamos el beneficio
-                            beneficio = precioVentaU - costeProduccion;
+                    // Calcular precio venta unitario
+                    double precioVentaUnitario = (costeProduccion + beneficio);
 
-                            // Calculamos las unidades para obtener beneficio
-                            unidadesParaBeneficio = (int) Math.ceil(BENEFICIO_VENTAS / beneficio);
+                    // Calcular unidades hasta llegar al beneficio
+                    int unidadesParaBeneficio = UtilidadesEjercicio3E.calcularUnidadesParaBeneficio(beneficio);
 
-                            String resultados = """
-                                                El coste de producción es %.2f
-                                                El precio de venta unitario es %.2f
-                                                Las unidades para beneficio son %d"""
-                                    .formatted(costeProduccion, precioVentaU,
-                                            unidadesParaBeneficio);
+                    // Mostrar toda la información
+                    String mostrarInformacion = """
+                                              El coste de producción es %.2f
+                                              El precio de venta es %.2f
+                                              Y las unidades para beneficio %d""".formatted(costeProduccion,
+                             precioVentaUnitario, unidadesParaBeneficio);
+                    JOptionPane.showMessageDialog(null, mostrarInformacion);
 
-                            JOptionPane.showMessageDialog(null, resultados);
-                            break;
-                        case "SALIR":
-                            break;
-                        default:
-                            JOptionPane.showMessageDialog(null, "El código no es valido");
-                    }
-                } while (!(opcion.equals("M1") || opcion.equals("M2")
-                        || opcion.equals("T1") || opcion.equals("T2")
-                        || opcion.equals("P1") || opcion.equals("SALIR")));
+                } else { // Si es salir
+                    opcion = "salir";
+                }
             }
-        } while (!opcion.equals("SALIR"));
+
+        } while (opcion.equalsIgnoreCase("calcular"));
     }
-    
+
 }
