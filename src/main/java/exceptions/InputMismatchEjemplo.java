@@ -33,7 +33,7 @@ public class InputMismatchEjemplo {
         System.out.println("La calificación es: " + calificacion);
     }
 
-    private static void leerCalificacionSinErrores() {
+    public static void leerCalificacionSinErrores() {
 
         System.out.println("Introduce una calificación entera (0 - 10): ");
         int calificacion = 0;
